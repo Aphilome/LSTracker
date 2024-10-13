@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lptracker-api", "lptracker-api\lptracker-api.csproj", "{93626FD1-ED75-4E62-9124-60752072E8A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lptracker-bl", "lptracker-bl\lptracker-bl.csproj", "{9F792E32-81FF-42D1-A740-BD2F5BAE57E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{93626FD1-ED75-4E62-9124-60752072E8A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93626FD1-ED75-4E62-9124-60752072E8A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93626FD1-ED75-4E62-9124-60752072E8A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F792E32-81FF-42D1-A740-BD2F5BAE57E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F792E32-81FF-42D1-A740-BD2F5BAE57E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F792E32-81FF-42D1-A740-BD2F5BAE57E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F792E32-81FF-42D1-A740-BD2F5BAE57E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
