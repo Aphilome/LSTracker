@@ -39,7 +39,7 @@ public class Tracker : ITracker
 
         try
         {
-            _serialPort.WriteLine(msg + "$");
+            _serialPort.WriteLine(msg);
             Console.WriteLine("Sent to Arduino: " + msg);
         }
         catch (Exception ex)
