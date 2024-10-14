@@ -5,30 +5,27 @@ namespace lptracker_api;
 
 public static class Endpoints
 {
-    private static ITracker _tracker;
-
-    public static WebApplication AddLptrackerEndpoints(this WebApplication app, ITracker tracker)
+    public static WebApplication AddLptrackerEndpoints(this WebApplication app)
     {
-        _tracker = tracker;
-        app.MapGet("/open", GetOpen).WithName(nameof(GetOpen)).WithOpenApi();
-        app.MapGet("/send", Send).WithName(nameof(Send)).WithOpenApi();
-        app.MapGet("/close", Close).WithName(nameof(Close)).WithOpenApi();
+        app.MapPost("/open", GetOpen).WithName(nameof(GetOpen)).WithOpenApi();
+        app.MapPut("/send", Send).WithName(nameof(Send)).WithOpenApi();
+        app.MapDelete("/close", Close).WithName(nameof(Close)).WithOpenApi();
 
         return app;
     }
 
-    private static async Task GetOpen([FromQuery] string portName)
+    private static async Task GetOpen([FromQuery] string portName, ITracker tracker)
     {
-        _tracker.Open(portName);
+        tracker.Open(portName);
     }
 
-    private static async Task Send([FromQuery] string msg)
+    private static async Task Send([FromQuery] string msg, ITracker tracker)
     {
-        _tracker.Send(msg);
+        await tracker.Send(msg);
     }
 
-    private static async Task Close()
+    private static async Task Close(ITracker tracker)
     {
-        _tracker.Close();
+        tracker.Close();
     }
 }

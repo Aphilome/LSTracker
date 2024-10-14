@@ -10,7 +10,10 @@ public class Tracker : ITracker
     public void Open(string portName)
     {
         TryClose();
-        _serialPort = new SerialPort(portName, BAUD_RATE);
+        _serialPort = new SerialPort(portName, BAUD_RATE)
+        {
+            DtrEnable = true
+        };
         _serialPort.DataReceived += OnRecive;
 
         try
@@ -21,15 +24,12 @@ public class Tracker : ITracker
         catch (Exception ex)
         {
             Console.WriteLine("Error init: " + ex.Message);
-            throw;
-        }
-        finally
-        {
             TryClose();
+            throw;
         }
     }
 
-    public void Send(string msg)
+    public async Task Send(string msg)
     {
         if (_serialPort is null)
         {
@@ -39,7 +39,7 @@ public class Tracker : ITracker
 
         try
         {
-            _serialPort.WriteLine(msg);
+            _serialPort.WriteLine(msg + "$");
             Console.WriteLine("Sent to Arduino: " + msg);
         }
         catch (Exception ex)

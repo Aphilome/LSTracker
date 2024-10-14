@@ -9,6 +9,6 @@ namespace lptracker_bl;
 public interface ITracker
 {
     void Open(string portName);
-    void Send(string msg);
+    Task Send(string msg);
     void Close();
 }
