@@ -2,17 +2,22 @@
 
 namespace copter::channel
 {
-
-bool TCPChannel::Read(std::uint8_t& data, std::size_t length)
+    
+TCPChannel::TCPChannel(const std::string& host, std::uint16_t port)
+    : m_connection(sockpp::inet_address(host, port))
 {
-    // TODO: implement
-    return false;
 }
 
-bool TCPChannel::Write(const std::uint8_t& data, std::size_t length)
+bool TCPChannel::Read(void* data, std::size_t length)
 {
-    // TODO: implement
-    return false;
+    auto read_bytes = m_connection.read(data, length);
+    return read_bytes != -1;
+}
+
+bool TCPChannel::Write(const void* data, std::size_t length)
+{
+    auto written_bytes = m_connection.write(data, length);
+    return written_bytes != -1;
 }
 
 } // namespace copter::channel

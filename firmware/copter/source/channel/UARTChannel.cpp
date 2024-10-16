@@ -3,13 +3,13 @@
 namespace copter::channel
 {
 
-bool UARTChannel::Read(std::uint8_t& data, std::size_t length)
+bool UARTChannel::Read(void* data, std::size_t length)
 {
     // TODO: implement
     return false;
 }
 
-bool UARTChannel::Write(const std::uint8_t& data, std::size_t length)
+bool UARTChannel::Write(const void* data, std::size_t length)
 {
     // TODO: implement
     return false;

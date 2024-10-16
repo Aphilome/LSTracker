@@ -1,9 +1,9 @@
-#ifndef TCP_CHANNEL_HPP
-#define TCP_CHANNEL_HPP
+#ifndef UDP_CHANNEL_HPP
+#define UDP_CHANNEL_HPP
 
 #include "IChannel.hpp"
 
-#include <sockpp/tcp_connector.h>
+#include <sockpp/udp_socket.h>
 
 #include <string>
 #include <cstdint>
@@ -11,17 +11,17 @@
 namespace copter::channel
 {
 
-class TCPChannel final
+class UDPChannel final
     : public IChannel
 {
 public:
-    TCPChannel(const std::string& host, std::uint16_t port);
+    UDPChannel(const std::string& host, std::uint16_t port);
 
     bool Read(void* data, std::size_t length) override;
     bool Write(const void* data, std::size_t length) override;
 
 private:
-    sockpp::tcp_connector m_connection;
+    sockpp::udp_socket m_socket;
 };
 
 } // namespace copter::channel

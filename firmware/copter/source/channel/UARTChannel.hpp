@@ -6,12 +6,12 @@
 namespace copter::channel
 {
 
-class UARTChannel
+class UARTChannel final
     : public IChannel
 {
 public:
-    bool Read(std::uint8_t& data, std::size_t length) override;
-    bool Write(const std::uint8_t& data, std::size_t length) override;
+    bool Read(void* data, std::size_t length) override;
+    bool Write(const void* data, std::size_t length) override;
 };
 
 } // namespace copter::channel

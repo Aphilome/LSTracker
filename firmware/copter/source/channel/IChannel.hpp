@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <string>
-#include <cstddef>
 #include <cstdint>
 
 namespace copter::channel
@@ -13,13 +12,14 @@ class IChannel
 {
 public:
     virtual ~IChannel() = default;
-    virtual bool Read(std::uint8_t& data, std::size_t length) = 0;
-    virtual bool Write(const std::uint8_t& data, std::size_t length) = 0;
+    virtual bool Read(void* data, std::size_t length) = 0;
+    virtual bool Write(const void* data, std::size_t length) = 0;
 };
 
 enum class Protocol
 {
     TCP,
+    UDP,
     UART,
 };
 
