@@ -5,6 +5,7 @@ function App_Tbirdper() {
     const baseUri = 'http://localhost:5298';
     const [port, setPort] = useState('com8');
     const [message, setMessage] = useState('');
+    const [receiveMessage, setReceiveMessage] = useState('');
 
     const onOpen = () => {
         axios.post(`${baseUri}/open?portName=${port}`)
@@ -21,6 +22,14 @@ function App_Tbirdper() {
             })
             .catch(e => alert(e));
     }
+    const onReceiveTest = () => {
+        axios.get(`${baseUri}/receive-test?msg=${receiveMessage}`)
+            .then(r => {
+
+            })
+            .catch(e => alert(e));
+    }
+
     const onClose = () => {
         axios.delete(`${baseUri}/close`)
             .then(r => {
@@ -36,6 +45,9 @@ function App_Tbirdper() {
             <br/>
             <input type={'text'} value={message} onChange={e => setMessage(e.target.value)}/>
             <button onClick={onSend}>Send</button>
+            <br/>
+            <input type={'text'} value={receiveMessage} onChange={e => setReceiveMessage(e.target.value)}/>
+            <button onClick={onReceiveTest}>Test receive</button>
             <br/>
             <button onClick={onClose}>Close</button>
 
