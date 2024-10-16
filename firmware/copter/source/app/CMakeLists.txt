@@ -2,6 +2,10 @@ set(PROJECT_NAME copter-app)
 
 set(SOURCE_LIST
     Main.cpp
+    ArgumentsParser.hpp
+    ArgumentsParser.cpp
+    CopterApp.hpp
+    CopterApp.cpp
 )
 
 find_package(argparse REQUIRED)
