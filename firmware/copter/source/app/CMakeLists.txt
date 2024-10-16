@@ -4,6 +4,8 @@ set(SOURCE_LIST
     Main.cpp
 )
 
+find_package(argparse REQUIRED)
+
 add_executable(${PROJECT_NAME} ${SOURCE_LIST})
 
 target_link_libraries(${PROJECT_NAME}
@@ -14,6 +16,7 @@ target_link_libraries(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         "${PROJECT_SOURCE_DIR}/source/channel/"
+        "${argparse_DIR}/../../include/"
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)

@@ -3,7 +3,7 @@
 
 #include "IChannel.hpp"
 
-#include <sockpp/tcp_connector.h>
+#include <sockpp/tcp_acceptor.h>
 
 #include <string>
 #include <cstdint>
@@ -15,13 +15,14 @@ class TCPChannel final
     : public IChannel
 {
 public:
-    TCPChannel(const std::string& host, std::uint16_t port);
+    TCPChannel(std::uint16_t port);
 
     bool Read(void* data, std::size_t length) override;
     bool Write(const void* data, std::size_t length) override;
 
 private:
-    sockpp::tcp_connector m_connection;
+    sockpp::tcp_acceptor m_acceptor;
+    sockpp::tcp_socket m_socket;
 };
 
 } // namespace copter::channel

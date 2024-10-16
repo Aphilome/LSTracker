@@ -20,4 +20,4 @@ target_link_libraries(${PROJECT_NAME}
         Sockpp::sockpp-static
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
