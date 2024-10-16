@@ -1,8 +1,10 @@
+import Map from './components/map/Map'
+import './App.css'
 
 function App_Aphilome() {
     return (
         <>
-            <p> привет </p>
+            <Map />
         </>
     )
 }
