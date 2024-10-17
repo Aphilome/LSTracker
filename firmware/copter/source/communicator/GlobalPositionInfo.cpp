@@ -14,7 +14,7 @@ GlobalPositionInfo::GlobalPositionInfo(const mavlink_global_position_int_t& glob
     , speed_x_ms(global_position.vx)
     , speed_y_ms(global_position.vy)
     , speed_z_ms(global_position.vz)
-    , yaw_deg(global_position.hdg)
+    , yaw_deg(global_position.hdg / 100.0f)
 {
 }
 
