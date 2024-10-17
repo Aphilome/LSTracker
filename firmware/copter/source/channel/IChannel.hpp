@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <cstdint>
+#include <iterator>
 
 namespace copter::channel
 {
@@ -13,8 +14,8 @@ class IChannel
 public:
     virtual ~IChannel() = default;
     
-    virtual bool Read(void* data, std::size_t length) = 0;
-    virtual bool Write(const void* data, std::size_t length) = 0;
+    virtual std::size_t Read(void* data, std::size_t length) = 0;
+    virtual std::size_t Write(const void* data, std::size_t length) = 0;
 };
 
 enum class Protocol

@@ -15,8 +15,8 @@ class UARTChannel final
 public:
     UARTChannel(const std::string& device, std::uint64_t baudrate) {}
 
-    bool Read(void* data, std::size_t length) override;
-    bool Write(const void* data, std::size_t length) override;
+    std::size_t Read(void* data, std::size_t length) override;
+    std::size_t Write(const void* data, std::size_t length) override;
 };
 
 } // namespace copter::channel

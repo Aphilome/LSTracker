@@ -8,16 +8,14 @@ UDPChannel::UDPChannel(const std::string& host, std::uint16_t port)
 {
 }
 
-bool UDPChannel::Read(void* data, std::size_t length)
+std::size_t UDPChannel::Read(void* data, std::size_t length)
 {
-    auto read_bytes = m_socket.recv(data, length);
-    return read_bytes != -1;
+    return m_socket.recv(data, length);
 }
 
-bool UDPChannel::Write(const void* data, std::size_t length)
+std::size_t UDPChannel::Write(const void* data, std::size_t length)
 {
-    auto sent_bytes = m_socket.send(data, length);
-    return sent_bytes != -1;
+    return m_socket.send(data, length);
 }
 
 } // namespace copter::channel

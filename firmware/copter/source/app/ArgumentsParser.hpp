@@ -1,7 +1,7 @@
 #ifndef ARGUMENTS_PARSER_HPP
 #define ARGUMENTS_PARSER_HPP
 
-#include <IChannel.hpp>
+#include <channel/IChannel.hpp>
 
 #include <argparse/argparse.hpp>
 

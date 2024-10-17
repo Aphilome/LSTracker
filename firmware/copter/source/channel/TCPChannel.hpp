@@ -17,8 +17,8 @@ class TCPChannel final
 public:
     TCPChannel(std::uint16_t port);
 
-    bool Read(void* data, std::size_t length) override;
-    bool Write(const void* data, std::size_t length) override;
+    std::size_t Read(void* data, std::size_t length) override;
+    std::size_t Write(const void* data, std::size_t length) override;
 
 private:
     sockpp::tcp_acceptor m_acceptor;

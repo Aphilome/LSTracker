@@ -44,26 +44,26 @@ std::unique_ptr<IChannel> Open(Protocol protocol, const std::string& address)
 
     switch (protocol)
     {
-    case Protocol::TCP:
-    {
-        auto port = std::stoul(address);
-        return std::make_unique<TCPChannel>(static_cast<std::uint16_t>(port));
-    }
+        case Protocol::TCP:
+        {
+            auto port = std::stoul(address);
+            return std::make_unique<TCPChannel>(static_cast<std::uint16_t>(port));
+        }
 
-     case Protocol::UDP:
-     {
-        auto [host, port] = SplitAddress(address);
-        return std::make_unique<UDPChannel>(host, static_cast<std::uint16_t>(port));
-     }
+        case Protocol::UDP:
+        {
+            auto [host, port] = SplitAddress(address);
+            return std::make_unique<UDPChannel>(host, static_cast<std::uint16_t>(port));
+        }
 
-    case Protocol::UART:
-    {
-        auto [device, baudrate] = SplitAddress(address);
-        return std::make_unique<UARTChannel>(device, baudrate);
-    }
+        case Protocol::UART:
+        {
+            auto [device, baudrate] = SplitAddress(address);
+            return std::make_unique<UARTChannel>(device, baudrate);
+        }
 
-    default:
-        return nullptr;
+        default:
+            return nullptr;
     }
 }
 

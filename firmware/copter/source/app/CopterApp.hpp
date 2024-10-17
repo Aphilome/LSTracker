@@ -3,6 +3,10 @@
 
 #include "ArgumentsParser.hpp"
 
+#include "channel/IChannel.hpp"
+
+#include <optional>
+
 namespace copter::app
 {
 
@@ -12,7 +16,8 @@ public:
     int Run(int argc, char** argv);
 
 private:
-    Arguments ParseArguments(int argc, char** argv) const;
+    std::optional<Arguments> ParseArguments(int argc, char** argv) const;
+    std::unique_ptr<channel::IChannel> OpenChannel(const Arguments& arguments);
 };
 
 } // namespace copter::app
