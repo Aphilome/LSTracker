@@ -18,7 +18,26 @@ int CopterApp::Run(int argc, char** argv)
         return EXIT_FAILURE;
 
     auto communicator = communicator::MAVLinkCommunicator(*channel);
-    while (true) {}
+    communicator.SetGlobalPositionCallback([](const communicator::GlobalPositionInfo& gpi)
+    {
+        std::cout
+            << "[GlobalPositionInfo]"
+            << " time = " << gpi.time_ms
+            << "; latitude = " << gpi.latitude_deg
+            << "; longitude = " << gpi.longitude_deg
+            << "; altitude = " << gpi.altitude_m
+            << "; relative_altitude = " << gpi.relative_altitude_m
+            << "; speed_x = " << gpi.speed_x_ms
+            << "; speed_y = " << gpi.speed_y_ms
+            << "; speed_z = " << gpi.speed_z_ms
+            << "; yaw = " << gpi.yaw_deg
+            << std::endl;
+    });
+
+    while (true)
+    {
+    }
+
     return EXIT_SUCCESS;
 }
 

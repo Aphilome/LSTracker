@@ -1,8 +1,8 @@
 #ifndef MAV_LINK_COMMUNICATOR_HPP
 #define MAV_LINK_COMMUNICATOR_HPP
 
-#include "InfoTypes.hpp"
 #include "ByteStream.hpp"
+#include "GlobalPositionInfo.hpp"
 
 #include <atomic>
 #include <thread>
@@ -29,17 +29,22 @@ public:
     MAVLinkCommunicator(channel::IChannel& channel);
     ~MAVLinkCommunicator();
 
-    void AddGlobalPositionCallback(GlobalPositionInfoCallback callback);
+    void SetGlobalPositionCallback(GlobalPositionInfoCallback callback);
 
 private:
+    using mavlink_message_t = __mavlink_message;
+
     void ReadThread();
-    bool ReadMessage(__mavlink_message& message);
-    void ProcessMessage(const __mavlink_message& message);
+    bool ReadMessage(mavlink_message_t& message);
+    void ProcessMessage(const mavlink_message_t& message);
+    void ProcessGlobalPositionMessage(const mavlink_message_t& message);
 
 private:
     ByteStream m_byte_stream;
     std::thread m_read_thread;
     std::atomic_bool m_is_working = true;
+
+    GlobalPositionInfoCallback m_global_position_callback = {};
 };
 
 } // namespace copter::communicator

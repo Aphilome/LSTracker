@@ -29,8 +29,9 @@ MAVLinkCommunicator::~MAVLinkCommunicator()
     m_is_working = false;
 }
 
-void MAVLinkCommunicator::AddGlobalPositionCallback(GlobalPositionInfoCallback callback)
+void MAVLinkCommunicator::SetGlobalPositionCallback(GlobalPositionInfoCallback callback)
 {
+    m_global_position_callback = std::move(callback);
 }
 
 void MAVLinkCommunicator::ReadThread()
@@ -57,7 +58,7 @@ bool MAVLinkCommunicator::ReadMessage(mavlink_message_t& message)
 {
     std::uint8_t byte = {};
     mavlink_status_t status = {};
-    
+
     while (m_byte_stream.ReadNext(byte))
     {
         if (mavlink_parse_char(MAVLINK_COMM_1, byte, &message, &status))
@@ -75,25 +76,35 @@ void MAVLinkCommunicator::ProcessMessage(const mavlink_message_t& message)
     {
         case MAVLINK_MSG_ID_HEARTBEAT:
         {
-            std::cout << "MAVLINK_MSG_ID_HEARTBEAT" << std::endl;
+            //std::cout << "MAVLINK_MSG_ID_HEARTBEAT" << std::endl;
             break;
         }
 
         case MAVLINK_MSG_ID_GPS_RAW_INT:
         {
-            std::cout << "MAVLINK_MSG_ID_GPS_RAW_INT" << std::endl;
+            //std::cout << "MAVLINK_MSG_ID_GPS_RAW_INT" << std::endl;
             break;
         }
 
         case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
         {
-            std::cout << "MAVLINK_MSG_ID_GLOBAL_POSITION_INT" << std::endl;
+            ProcessGlobalPositionMessage(message);
             break;
         }
 
         default:
             break;
     }
+}
+
+void MAVLinkCommunicator::ProcessGlobalPositionMessage(const mavlink_message_t& message)
+{
+    if (!m_global_position_callback)
+        return;
+
+    mavlink_global_position_int_t global_position;
+    mavlink_msg_global_position_int_decode(&message, &global_position);
+    m_global_position_callback(GlobalPositionInfo(global_position));
 }
 
 } // namespace copter::communicator
