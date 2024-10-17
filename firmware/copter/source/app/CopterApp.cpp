@@ -53,12 +53,7 @@ int CopterApp::Run(int argc, char** argv)
 
 std::optional<Arguments> CopterApp::ParseArguments(int argc, char** argv) const
 {
-    Arguments arguments = {};
-    arguments.protocol = channel::Protocol::UDP;
-    arguments.address = "127.0.0.1:50000";
-    return arguments;
-
-    /*ArgumentsParser parser;
+    ArgumentsParser parser;
 
     try
     {
@@ -69,7 +64,7 @@ std::optional<Arguments> CopterApp::ParseArguments(int argc, char** argv) const
         std::cerr << e.what() << std::endl << std::endl;
         std::cerr << parser.GetHelp() << std::endl;
         return std::nullopt;
-    }*/
+    }
 }
 
 std::unique_ptr<channel::IChannel> CopterApp::OpenChannel(const Arguments& arguments)
