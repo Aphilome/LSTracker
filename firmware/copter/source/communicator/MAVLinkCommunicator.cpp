@@ -34,6 +34,11 @@ void MAVLinkCommunicator::SetGlobalPositionCallback(GlobalPositionInfoCallback c
     m_global_position_callback = std::move(callback);
 }
 
+void MAVLinkCommunicator::SetGPSRawCallback(GPSRawInfoCallback callback)
+{
+    m_gps_raw_callback = std::move(callback);
+}
+
 void MAVLinkCommunicator::ReadThread()
 {
     using namespace std::chrono_literals;
@@ -74,15 +79,9 @@ void MAVLinkCommunicator::ProcessMessage(const mavlink_message_t& message)
 {
     switch (message.msgid)
     {
-        case MAVLINK_MSG_ID_HEARTBEAT:
-        {
-            //std::cout << "MAVLINK_MSG_ID_HEARTBEAT" << std::endl;
-            break;
-        }
-
         case MAVLINK_MSG_ID_GPS_RAW_INT:
         {
-            //std::cout << "MAVLINK_MSG_ID_GPS_RAW_INT" << std::endl;
+            ProcessGPSRawMessage(message);
             break;
         }
 
@@ -105,6 +104,16 @@ void MAVLinkCommunicator::ProcessGlobalPositionMessage(const mavlink_message_t& 
     mavlink_global_position_int_t global_position;
     mavlink_msg_global_position_int_decode(&message, &global_position);
     m_global_position_callback(GlobalPositionInfo(global_position));
+}
+
+void MAVLinkCommunicator::ProcessGPSRawMessage(const mavlink_message_t& message)
+{
+    if (!m_gps_raw_callback)
+        return;
+
+    mavlink_gps_raw_int_t gps_raw;
+    mavlink_msg_gps_raw_int_decode(&message, &gps_raw);
+    m_gps_raw_callback(GPSRawInfo(gps_raw));
 }
 
 } // namespace copter::communicator

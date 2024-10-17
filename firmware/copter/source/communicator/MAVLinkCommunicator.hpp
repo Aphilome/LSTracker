@@ -3,6 +3,7 @@
 
 #include "ByteStream.hpp"
 #include "GlobalPositionInfo.hpp"
+#include "GPSRawInfo.hpp"
 
 #include <atomic>
 #include <thread>
@@ -22,6 +23,7 @@ namespace copter::communicator
 {
 
 using GlobalPositionInfoCallback = std::function<void(const GlobalPositionInfo&)>;
+using GPSRawInfoCallback = std::function<void(const GPSRawInfo&)>;
 
 class MAVLinkCommunicator
 {
@@ -30,6 +32,7 @@ public:
     ~MAVLinkCommunicator();
 
     void SetGlobalPositionCallback(GlobalPositionInfoCallback callback);
+    void SetGPSRawCallback(GPSRawInfoCallback callback);
 
 private:
     using mavlink_message_t = __mavlink_message;
@@ -38,6 +41,7 @@ private:
     bool ReadMessage(mavlink_message_t& message);
     void ProcessMessage(const mavlink_message_t& message);
     void ProcessGlobalPositionMessage(const mavlink_message_t& message);
+    void ProcessGPSRawMessage(const mavlink_message_t& message);
 
 private:
     ByteStream m_byte_stream;
@@ -45,6 +49,7 @@ private:
     std::atomic_bool m_is_working = true;
 
     GlobalPositionInfoCallback m_global_position_callback = {};
+    GPSRawInfoCallback m_gps_raw_callback = {};
 };
 
 } // namespace copter::communicator

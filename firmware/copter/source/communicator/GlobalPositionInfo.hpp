@@ -2,7 +2,6 @@
 #define GLOBAL_POSITION_INFO_HPP
 
 #include <cstdint>
-#include <iosfwd>
 
 struct __mavlink_global_position_int_t;
 
@@ -11,7 +10,7 @@ namespace copter::communicator
 
 struct GlobalPositionInfo
 {
-    std::uint32_t time_ms = {};
+    std::uint32_t time_boot_ms = {};
     float latitude_deg = {};
     float longitude_deg = {};
     float altitude_m = {};

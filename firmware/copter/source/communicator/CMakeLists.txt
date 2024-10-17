@@ -5,6 +5,8 @@ set(SOURCE_LIST
     ByteStream.cpp
     GlobalPositionInfo.hpp
     GlobalPositionInfo.cpp
+    GPSRawInfo.hpp
+    GPSRawInfo.cpp
     MAVLinkCommunicator.hpp
     MAVLinkCommunicator.cpp
 )

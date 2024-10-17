@@ -22,7 +22,7 @@ int CopterApp::Run(int argc, char** argv)
     {
         std::cout
             << "[GlobalPositionInfo]"
-            << " time = " << gpi.time_ms
+            << " time_boot = " << gpi.time_boot_ms
             << "; latitude = " << gpi.latitude_deg
             << "; longitude = " << gpi.longitude_deg
             << "; altitude = " << gpi.altitude_m
@@ -33,6 +33,16 @@ int CopterApp::Run(int argc, char** argv)
             << "; yaw = " << gpi.yaw_deg
             << std::endl;
     });
+    /*communicator.SetGPSRawCallback([](const communicator::GPSRawInfo& gri)
+    {
+        std::cout
+            << "[GPSRawInfo]"
+            << " time = " << gri.time_us
+            << "; latitude = " << gri.latitude_deg
+            << "; longitude = " << gri.longitude_deg
+            << "; altitude = " << gri.altitude_m
+            << std::endl;
+    });*/
 
     while (true)
     {
