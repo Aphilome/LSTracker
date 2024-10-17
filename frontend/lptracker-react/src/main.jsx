@@ -9,6 +9,6 @@ const rootElement =  document.getElementById('root');
 const reactRoot = ReactDOM.createRoot(rootElement);
 reactRoot.render(
   <StrictMode>
-    <App_Tbirdper />
+    <App_Aphilome />
   </StrictMode>,
 )
