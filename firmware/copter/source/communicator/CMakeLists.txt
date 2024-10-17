@@ -2,6 +2,8 @@ set(PROJECT_NAME copter-communicator)
 
 set(SOURCE_LIST
     InfoTypes.hpp
+    ByteStream.hpp
+    ByteStream.cpp
     MAVLinkCommunicator.hpp
     MAVLinkCommunicator.cpp
 )

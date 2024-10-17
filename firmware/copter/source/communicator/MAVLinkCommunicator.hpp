@@ -2,9 +2,9 @@
 #define MAV_LINK_COMMUNICATOR_HPP
 
 #include "InfoTypes.hpp"
+#include "ByteStream.hpp"
 
 #include <atomic>
-#include <vector>
 #include <thread>
 #include <cstdint>
 #include <functional>
@@ -37,12 +37,7 @@ private:
     void ProcessMessage(const __mavlink_message& message);
 
 private:
-    channel::IChannel& m_channel;
-
-    std::vector<uint8_t> m_buffer;
-    std::size_t m_data_size = 0;
-    std::size_t m_data_index = 0;
-
+    ByteStream m_byte_stream;
     std::thread m_read_thread;
     std::atomic_bool m_is_working = true;
 };

@@ -8,15 +8,20 @@
 #include <iostream>
 #include <algorithm>
 
+namespace
+{
+
+constexpr std::size_t max_package_size = 1500;
+
+} // namespace
+
 namespace copter::communicator
 {
 
 MAVLinkCommunicator::MAVLinkCommunicator(channel::IChannel& channel)
-    : m_channel(channel)
+    : m_byte_stream(channel, max_package_size)
     , m_read_thread([this] { ReadThread(); })
 {
-    constexpr std::size_t max_package_size = 1500;
-    m_buffer.resize(max_package_size);
 }
 
 MAVLinkCommunicator::~MAVLinkCommunicator()
@@ -50,18 +55,12 @@ void MAVLinkCommunicator::ReadThread()
 
 bool MAVLinkCommunicator::ReadMessage(mavlink_message_t& message)
 {
-    if (m_data_index >= m_data_size)
-    {
-        auto read_bytes = m_channel.Read(m_buffer.data(), m_buffer.size());
-        m_data_index = 0;
-        m_data_size = std::max<std::size_t>(0, read_bytes);
-    }
-
+    std::uint8_t byte = {};
     mavlink_status_t status = {};
-
-    for ( ; m_data_index < m_data_size; ++m_data_index)
+    
+    while (m_byte_stream.ReadNext(byte))
     {
-        if (mavlink_parse_char(MAVLINK_COMM_1, m_buffer[m_data_index], &message, &status))
+        if (mavlink_parse_char(MAVLINK_COMM_1, byte, &message, &status))
         {
             return true;
         }
@@ -89,30 +88,6 @@ void MAVLinkCommunicator::ProcessMessage(const mavlink_message_t& message)
         case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
         {
             std::cout << "MAVLINK_MSG_ID_GLOBAL_POSITION_INT" << std::endl;
-            break;
-        }
-
-        case MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV:
-        {
-            std::cout << "MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV" << std::endl;
-            break;
-        }
-
-        case MAVLINK_MSG_ID_HIL_GPS:
-        {
-            std::cout << "MAVLINK_MSG_ID_HIL_GPS" << std::endl;
-            break;
-        }
-
-        case MAVLINK_MSG_ID_GPS2_RAW:
-        {
-            std::cout << "MAVLINK_MSG_ID_GPS2_RAWS" << std::endl;
-            break;
-        }
-
-        case MAVLINK_MSG_ID_LOCAL_POSITION_NED:
-        {
-            std::cout << "MAVLINK_MSG_ID_LOCAL_POSITION_NED" << std::endl;
             break;
         }
 

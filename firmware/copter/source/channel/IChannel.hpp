@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <string>
-#include <cstdint>
 #include <iterator>
 
 namespace copter::channel
