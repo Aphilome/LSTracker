@@ -5,8 +5,7 @@
 #include <common/mavlink.h>
 
 #include <chrono>
-#include <iostream>
-#include <algorithm>
+#include <thread>
 
 namespace
 {
@@ -20,13 +19,7 @@ namespace copter::communicator
 
 MAVLinkCommunicator::MAVLinkCommunicator(channel::IChannel& channel)
     : m_byte_stream(channel, max_package_size)
-    , m_read_thread([this] { ReadThread(); })
 {
-}
-
-MAVLinkCommunicator::~MAVLinkCommunicator()
-{
-    m_is_working = false;
 }
 
 void MAVLinkCommunicator::SetGlobalPositionCallback(GlobalPositionInfoCallback callback)
@@ -39,9 +32,16 @@ void MAVLinkCommunicator::SetGPSRawCallback(GPSRawInfoCallback callback)
     m_gps_raw_callback = std::move(callback);
 }
 
-void MAVLinkCommunicator::ReadThread()
+void MAVLinkCommunicator::Stop()
+{
+    m_is_working = false;
+}
+
+void MAVLinkCommunicator::ReadMessages()
 {
     using namespace std::chrono_literals;
+
+    m_is_working = true;
 
     mavlink_message_t message = {};
 

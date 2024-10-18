@@ -4,6 +4,8 @@
 
 #include "communicator/MAVLinkCommunicator.hpp"
 
+#include <thread>
+
 namespace copter::app
 {
 
@@ -44,9 +46,8 @@ int CopterApp::Run(int argc, char** argv)
             << std::endl;
     });*/
 
-    while (true)
-    {
-    }
+    std::thread mavlink_thread(&communicator::MAVLinkCommunicator::ReadMessages, &communicator);
+    mavlink_thread.join();
 
     return EXIT_SUCCESS;
 }
