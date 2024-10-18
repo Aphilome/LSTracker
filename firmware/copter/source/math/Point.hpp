@@ -9,7 +9,11 @@ struct Point
     float x = {};
     float y = {};
     float z = {};
+
+    float GetDistance(const Point& other) const;
+    Point GetMiddle(const Point& other) const;
 };
+
 
 } // namespace copter::math
 

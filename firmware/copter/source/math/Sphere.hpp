@@ -10,6 +10,8 @@ struct Sphere
 {
     Point center = {};
     float radius = {};
+
+    bool IsIntersected(const Sphere& first, const Sphere& second) const;
 };
 
 } // namespace copter::math

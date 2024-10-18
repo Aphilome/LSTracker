@@ -5,12 +5,19 @@
 namespace copter::math
 {
 
-float ComputeDistance(const Point& first, const Point& second)
+bool ComputeIntersection(const Sphere& first, const Sphere& second)
 {
-    auto dx = first.x - second.x;
-    auto dy = first.y - second.y;
-    auto dz = first.z - second.z;
-    return std::sqrt(dx * dx + dy * dy + dz *dz);
+    return false;
+}
+
+math::Point ComputeNearestPoint(const math::Point& target_point, const math::Sphere& sphere)
+{
+    return {};
+}
+
+math::Point ComputeNearestPoint(const math::Sphere& sphere, const math::Point& target_point)
+{
+    return ComputeNearestPoint(target_point, sphere);
 }
 
 } // namespace copter::math

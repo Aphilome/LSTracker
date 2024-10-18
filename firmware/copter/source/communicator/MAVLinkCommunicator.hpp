@@ -28,12 +28,13 @@ class MAVLinkCommunicator
 {
 public:
     MAVLinkCommunicator(channel::IChannel& channel);
- 
+    ~MAVLinkCommunicator();
+
     void SetGlobalPositionCallback(GlobalPositionInfoCallback callback);
     void SetGPSRawCallback(GPSRawInfoCallback callback);
 
     void Stop();
-    void ReadMessages();
+    void ReadMessagesThread();
 
 private:
     using mavlink_message_t = __mavlink_message;

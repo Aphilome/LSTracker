@@ -1,12 +1,14 @@
 set(PROJECT_NAME copter-math)
 
 set(SOURCE_LIST
-    Intersection.hpp
-    Intersection.cpp
     Point.hpp
+    Point.cpp
     Sphere.hpp
-    Utility.cpp
+    Sphere.cpp
     Utility.hpp
+    Utility.cpp
+    Vector.hpp
+    Vector.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_LIST})
