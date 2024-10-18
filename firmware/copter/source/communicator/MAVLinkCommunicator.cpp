@@ -22,6 +22,11 @@ MAVLinkCommunicator::MAVLinkCommunicator(channel::IChannel& channel)
 {
 }
 
+MAVLinkCommunicator::~MAVLinkCommunicator()
+{
+    Stop();
+}
+
 void MAVLinkCommunicator::SetGlobalPositionCallback(GlobalPositionInfoCallback callback)
 {
     m_global_position_callback = std::move(callback);
@@ -37,7 +42,7 @@ void MAVLinkCommunicator::Stop()
     m_is_working = false;
 }
 
-void MAVLinkCommunicator::ReadMessages()
+void MAVLinkCommunicator::ReadMessagesThread()
 {
     using namespace std::chrono_literals;
 
@@ -46,7 +51,7 @@ void MAVLinkCommunicator::ReadMessages()
     mavlink_message_t message = {};
 
     while (m_is_working)
-	{
+    {
         bool is_success = ReadMessage(message);
         if (is_success)
         {
@@ -56,7 +61,7 @@ void MAVLinkCommunicator::ReadMessages()
         {
             std::this_thread::sleep_for(100us);
         }
-	}
+    }
 }
 
 bool MAVLinkCommunicator::ReadMessage(mavlink_message_t& message)

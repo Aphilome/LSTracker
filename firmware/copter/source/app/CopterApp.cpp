@@ -46,7 +46,7 @@ int CopterApp::Run(int argc, char** argv)
             << std::endl;
     });*/
 
-    std::thread mavlink_thread(&communicator::MAVLinkCommunicator::ReadMessages, &communicator);
+    std::thread mavlink_thread(&communicator::MAVLinkCommunicator::ReadMessagesThread, &communicator);
     mavlink_thread.join();
 
     return EXIT_SUCCESS;
