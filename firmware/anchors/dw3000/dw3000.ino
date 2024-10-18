@@ -10,8 +10,8 @@ DW3000_SYS_CFG sys_cfg = {
 
 DW3000_TX_FCTRL txfctrl = { 0, 1, 0, TX_FCTRL_TXPSR_64, 0, 0 };
 
-#define RUN_TX_MODE
-//#define RUN_RX_MODE
+//#define RUN_TX_MODE // 9
+#define RUN_RX_MODE // 10
 
 static uint8_t tx_msg[] = {0xC5, 0, 'D', 'E', 'C', 'A', 'W', 'A', 'V', 'E'};
 static uint8_t rx_buffer[127] = {0,};
@@ -31,9 +31,9 @@ void setup() {
 }
 
 void loop() {
-  Serial.println("========= START in 5 sec ===========");
-  delay(5000);
-  DW3000_getDevID();
+  //Serial.println("========= START in 5 sec ===========");
+  //delay(5000);
+ // DW3000_getDevID();
 
 #ifdef RUN_TX_MODE
   // Set txfctrl tx_flen

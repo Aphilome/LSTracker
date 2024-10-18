@@ -13,6 +13,9 @@ public static class Endpoints
         app.MapDelete("/close", Close).WithName(nameof(Close)).WithOpenApi();
         app.MapGet("/receive-test", ReceiveTest).WithName(nameof(ReceiveTest)).WithOpenApi();
         app.MapGet("/anchors", GetAnchors).WithName(nameof(GetAnchors)).WithOpenApi();
+        app.MapGet("/logs", GetLogs).WithName(nameof(GetLogs)).WithOpenApi();
+        app.MapGet("/gps", GetGps).WithName(nameof(GetGps)).WithOpenApi();
+        app.MapGet("/uwb", GetUwb).WithName(nameof(GetUwb)).WithOpenApi();
 
         return app;
     }
@@ -40,5 +43,20 @@ public static class Endpoints
     private static async Task<IReadOnlyList<Anchor>> GetAnchors(ITracker tracker)
     {
         return tracker.GetAnchors();
+    }
+
+    private static async Task<IReadOnlyList<string>> GetLogs(ITracker tracker)
+    {
+        return tracker.GetLogs();
+    }
+
+    private static async Task<IReadOnlyList<DronPosition>> GetUwb(ITracker tracker)
+    {
+        return tracker.GetUwb();
+    }
+
+    private static async Task<IReadOnlyList<DronPosition>> GetGps(ITracker tracker)
+    {
+        return tracker.GetGps();
     }
 }

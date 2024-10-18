@@ -9,4 +9,7 @@ public interface ITracker
     void Close();
     void ReceiveTest(string msg);
     IReadOnlyList<Anchor> GetAnchors();
+    IReadOnlyList<string> GetLogs();
+    IReadOnlyList<DronPosition> GetUwb();
+    IReadOnlyList<DronPosition> GetGps();
 }

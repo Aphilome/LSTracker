@@ -11,4 +11,6 @@ public class Anchor
     public double Altitude { get; set; }
 
     public int SignalLevel { get; set; }
+
+    public string LastTime { get; set; } = string.Empty;
 }
