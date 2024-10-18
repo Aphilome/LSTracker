@@ -17,5 +17,4 @@ export const ANCHORS = [
         lon: -0.07,
         alt: 11,
     },
-
 ]
