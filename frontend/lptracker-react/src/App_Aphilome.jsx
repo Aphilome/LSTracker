@@ -2,6 +2,7 @@ import Map from './components/Map'
 import './App.css'
 import Plot from 'react-plotly.js'
 import {DRONEPOSITIONSGPS} from "./dronePositions";
+import { Box } from "@chakra-ui/react"
 
 function randomValues(num, mul) {
     const arr = [];
@@ -27,7 +28,6 @@ function App_Aphilome() {
 
     return (
         <>
-
             <Plot
                 data={traces}
                 layout={{
@@ -41,7 +41,12 @@ function App_Aphilome() {
                 <div className="text-blue-500">Hello world!</div>
                 <div>Hello world!</div>
             </h1>
+
             <Map />
+
+            <Box m={2} >Tomato </Box>
+            <Box maxW="960px" mx="auto" />
+            <Box m={[2, 3]} />
         </>
     )
 }
