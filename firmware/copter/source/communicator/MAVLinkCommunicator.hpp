@@ -30,8 +30,8 @@ public:
     MAVLinkCommunicator(channel::IChannel& channel);
     ~MAVLinkCommunicator();
 
-    void SetGlobalPositionCallback(GlobalPositionInfoCallback callback);
-    void SetGPSRawCallback(GPSRawInfoCallback callback);
+    void SetGlobalPositionCallback(GlobalPositionInfoCallback callback); // Not thread-safe, use before ReadMessagesLoop.
+    void SetGPSRawCallback(GPSRawInfoCallback callback); // Not thread-safe, use before ReadMessagesLoop.
 
     void Stop();
     void ReadMessagesLoop(std::uint32_t sleep_us = 100);

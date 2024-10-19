@@ -58,8 +58,8 @@ int CopterApp::Run(int argc, char** argv)
             << std::endl;
     });
 
-    std::thread mavlink_thread(&communicator::MAVLinkCommunicator::ReadMessagesLoop, &communicator);
-    std::thread lps_thread(&tracker::LocalPositionSystem::UpdateLoop, &lps);
+    std::thread mavlink_thread(&communicator::MAVLinkCommunicator::ReadMessagesLoop, &communicator, 100);
+    std::thread lps_thread(&tracker::LocalPositionSystem::UpdateLoop, &lps, 10000);
     mavlink_thread.join();
     lps_thread.join();
 

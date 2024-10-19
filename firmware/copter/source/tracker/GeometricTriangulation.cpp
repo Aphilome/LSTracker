@@ -1,11 +1,11 @@
-#include "TriangulationAlgorithm.hpp"
+#include "GeometricTriangulation.hpp"
 
 #include "math/Utility.hpp"
 
 namespace copter::tracker
 {
 
-std::optional<math::Point> TriangulationAlgorithm::Execute(const std::vector<math::Sphere>& spheres)
+std::optional<math::Point> GeometricTriangulation::Execute(const std::vector<math::Sphere>& spheres)
 {
     if (spheres.size() < 3)
         return std::nullopt;

@@ -1,10 +1,11 @@
 set(PROJECT_NAME copter-tracker)
 
 set(SOURCE_LIST
+    GeometricTriangulation.hpp
+    GeometricTriangulation.cpp
+    ITriangulationAlgorithm.hpp
     LocalPositionSystem.hpp
     LocalPositionSystem.cpp
-    TriangulationAlgorithm.hpp
-    TriangulationAlgorithm.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_LIST})
