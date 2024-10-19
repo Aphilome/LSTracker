@@ -13,7 +13,7 @@ std::optional<SphereIntersectionResult> ComputeIntersection(const Sphere& first,
 
     auto distance = first.center.GetDistance(second.center);
     auto area = ComputeTriangleArea(first.radius, second.radius, distance);
-    auto height = 2.0f * area / distance; // distance * height / 2 = area
+    auto height = 2.0 * area / distance; // distance * height / 2 = area
 
     auto circle_dir = Vector(first.center, second.center);
     circle_dir.Normalize();
@@ -43,9 +43,9 @@ math::Point ComputeNearestPoint(const math::Sphere& sphere, const math::Point& t
     return ComputeNearestPoint(target_point, sphere);
 }
 
-float ComputeTriangleArea(float a, float b, float c)
+double ComputeTriangleArea(double a, double b, double c)
 {
-    float p = 0.5f * (a + b + c);
+    double p = 0.5 * (a + b + c);
     return std::sqrt(p * (p - a) * (p - b) * (p - c));
 }
 

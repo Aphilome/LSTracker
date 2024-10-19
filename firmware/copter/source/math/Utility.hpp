@@ -14,7 +14,7 @@ struct SphereIntersectionResult
 {
     Point center = {};
     Vector normal = {};
-    float radius = {};
+    double radius = {};
 };
 
 // Finds intersection of two spheres and returns:
@@ -26,7 +26,7 @@ std::optional<SphereIntersectionResult> ComputeIntersection(const Sphere& first,
 math::Point ComputeNearestPoint(const math::Point& target_point, const math::Sphere& sphere);
 math::Point ComputeNearestPoint(const math::Sphere& sphere, const math::Point& target_point);
 
-float ComputeTriangleArea(float a, float b, float c);
+double ComputeTriangleArea(double a, double b, double c);
 
 } // namespace copter::math
 

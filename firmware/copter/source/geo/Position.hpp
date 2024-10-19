@@ -6,9 +6,9 @@ namespace copter::geo
 
 struct Position
 {
-    float latitude_deg = {};
-    float longitude_deg = {};
-    float altitude_m = {};
+    double latitude_deg = {};
+    double longitude_deg = {};
+    double altitude_m = {};
 };
 
 } // namespace copter::geo

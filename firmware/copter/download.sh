@@ -5,4 +5,4 @@ echo Updating vcpkg
 external/vcpkg/bootstrap-vcpkg.sh -disableMetrics
 
 echo Installing vcpkg libs
-external/vcpkg/vcpkg install sockpp argparse
+external/vcpkg/vcpkg install sockpp argparse geographiclib

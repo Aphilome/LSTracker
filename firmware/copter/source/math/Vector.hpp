@@ -8,13 +8,13 @@ namespace copter::math
 
 struct Vector
 {
-    float x = {};
-    float y = {};
-    float z = {};
+    double x = {};
+    double y = {};
+    double z = {};
 
     Vector() = default;
 
-    Vector(float x, float y, float z)
+    Vector(double x, double y, double z)
         : x(x)
         , y(y)
         , z(z)
@@ -26,7 +26,7 @@ struct Vector
         , z(end.z - begin.z)
     {}
 
-    float GetLength() const;
+    double GetLength() const;
     void Normalize();
 };
 

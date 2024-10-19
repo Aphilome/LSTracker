@@ -6,11 +6,11 @@ namespace copter::math
 
 struct Point
 {
-    float x = {};
-    float y = {};
-    float z = {};
+    double x = {};
+    double y = {};
+    double z = {};
 
-    float GetDistance(const Point& other) const;
+    double GetDistance(const Point& other) const;
     Point GetMiddle(const Point& other) const;
 };
 

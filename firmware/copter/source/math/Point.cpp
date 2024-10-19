@@ -5,7 +5,7 @@
 namespace copter::math
 {
 
-float Point::GetDistance(const Point& other) const
+double Point::GetDistance(const Point& other) const
 {
     auto dx = x - other.x;
     auto dy = y - other.y;
@@ -15,7 +15,7 @@ float Point::GetDistance(const Point& other) const
 
 Point Point::GetMiddle(const Point& other) const
 {
-    return { 0.5f * (x + other.x), 0.5f * (y + other.y), 0.5f * (z + other.z) };
+    return { 0.5 * (x + other.x), 0.5 * (y + other.y), 0.5 * (z + other.z) };
 }
 
 } // namespace copter::math

@@ -11,9 +11,9 @@ namespace copter::communicator
 struct GPSRawInfo
 {
     std::uint64_t time_us = {};
-    float latitude_deg = {};
-    float longitude_deg = {};
-    float altitude_m = {};
+    double latitude_deg = {};
+    double longitude_deg = {};
+    double altitude_m = {};
 
     // If necessary, add other fields
 

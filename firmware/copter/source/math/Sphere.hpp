@@ -9,7 +9,7 @@ namespace copter::math
 struct Sphere
 {
     Point center = {};
-    float radius = {};
+    double radius = {};
 
     bool IsIntersected(const Sphere& other) const;
 };

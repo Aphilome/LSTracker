@@ -5,7 +5,7 @@
 namespace copter::math
 {
 
-float Vector::GetLength() const
+double Vector::GetLength() const
 {
     return std::sqrt(x * x + y * y + z *z);
 }
