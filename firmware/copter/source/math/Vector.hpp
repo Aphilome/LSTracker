@@ -12,6 +12,8 @@ struct Vector
     float y = {};
     float z = {};
 
+    Vector() = default;
+
     Vector(float x, float y, float z)
         : x(x)
         , y(y)
