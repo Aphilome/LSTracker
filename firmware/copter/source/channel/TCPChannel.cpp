@@ -6,7 +6,7 @@ namespace copter::channel
 TCPChannel::TCPChannel(std::uint16_t port)
     : m_acceptor(port)
 {
-    m_socket= m_acceptor.accept();
+    m_socket = m_acceptor.accept();
 }
 
 std::size_t TCPChannel::Read(void* data, std::size_t length)

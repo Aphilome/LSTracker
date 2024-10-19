@@ -18,14 +18,14 @@ void InitSockets()
     std::call_once(s_init_flag, sockpp::initialize);
 }
 
-std::pair<std::string, std::uint64_t> SplitAddress(const std::string& address)
+std::pair<std::string, std::uint32_t> SplitAddress(const std::string& address)
 {
     auto comma_pos = address.find(':');
     if (comma_pos == std::string::npos)
         return {};
 
     auto name = address.substr(0, comma_pos);
-    auto value = std::stoull(address.substr(comma_pos + 1));
+    auto value = std::stoul(address.substr(comma_pos + 1));
     return {std::move(name), value};
 }
 
