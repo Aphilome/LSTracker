@@ -1,5 +1,7 @@
 #include "LocalPositionSystem.hpp"
 
+#include "geo/WGS84.hpp"
+
 #include <thread>
 
 namespace copter::tracker
@@ -40,9 +42,8 @@ void LocalPositionSystem::ComputePosition()
     auto point = m_algorithm.Execute({});
     if (point && m_position_callback)
     {
-        geo::Position position;
-        // TODO: Point to position
-        m_position_callback(position);
+        auto geo_position = geo::ConvertToGeoPosition(point.value());
+        m_position_callback(geo_position);
     }
 }
 
