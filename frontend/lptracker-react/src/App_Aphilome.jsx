@@ -27,10 +27,11 @@ function App_Aphilome() {
 
     return (
         <>
+
             <Plot
                 data={traces}
                 layout={{
-                    width: 900,
+                    width: 800,
                     height: 800,
                     title: `Simple 3D Scatter`
                 }}
