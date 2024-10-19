@@ -3,6 +3,7 @@
 #include "ArgumentsParser.hpp"
 
 #include "communicator/MAVLinkCommunicator.hpp"
+#include "tracker/LocalPositionSystem.hpp"
 
 #include <thread>
 
@@ -46,8 +47,21 @@ int CopterApp::Run(int argc, char** argv)
             << std::endl;
     });*/
 
-    std::thread mavlink_thread(&communicator::MAVLinkCommunicator::ReadMessagesThread, &communicator);
+    tracker::LocalPositionSystem lps;
+    lps.SetPositionCallback([](const geo::Position& position)
+    {
+        std::cout
+            << "[Position]"
+            << " latitude = " << position.latitude_deg
+            << "; longitude = " << position.longitude_deg
+            << "; altitude = " << position.altitude_m
+            << std::endl;
+    });
+
+    std::thread mavlink_thread(&communicator::MAVLinkCommunicator::ReadMessagesLoop, &communicator);
+    std::thread lps_thread(&tracker::LocalPositionSystem::UpdateLoop, &lps);
     mavlink_thread.join();
+    lps_thread.join();
 
     return EXIT_SUCCESS;
 }

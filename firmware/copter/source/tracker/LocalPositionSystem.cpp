@@ -1,5 +1,7 @@
 #include "LocalPositionSystem.hpp"
 
+#include <thread>
+
 namespace copter::tracker
 {
 
@@ -8,13 +10,14 @@ LocalPositionSystem::~LocalPositionSystem()
     Stop();
 }
 
-void LocalPositionSystem::UpdateThread()
+void LocalPositionSystem::UpdateLoop(std::uint32_t sleep_us)
 {
     m_is_working = true;
 
     while (m_is_working)
     {
         ComputePosition();
+        std::this_thread::sleep_for(std::chrono::microseconds(sleep_us));
     }
 }
 
@@ -27,15 +30,20 @@ void LocalPositionSystem::UpdateAnchor(const std::string& name)
 {
 }
 
-std::optional<geo::Position> LocalPositionSystem::GetPosition() const
+void LocalPositionSystem::SetPositionCallback(PositionCallback callback)
 {
-    std::lock_guard guard(m_position_mutex);
-    return m_position;
+    m_position_callback = std::move(callback);
 }
 
 void LocalPositionSystem::ComputePosition()
 {
-    auto position = m_algorithm.Execute({});
+    auto point = m_algorithm.Execute({});
+    if (point && m_position_callback)
+    {
+        geo::Position position;
+        // TODO: Point to position
+        m_position_callback(position);
+    }
 }
 
 } // namespace copter::tracker

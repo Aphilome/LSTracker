@@ -5,35 +5,34 @@
 
 #include "geo/Position.hpp"
 
-#include <mutex>
 #include <atomic>
 #include <string>
-#include <optional>
+#include <cstdint>
+#include <functional>
 
 namespace copter::tracker
 {
+
+using PositionCallback = std::function<void(const geo::Position&)>;
 
 class LocalPositionSystem
 {
 public:
     ~LocalPositionSystem();
 
-    void UpdateThread();
+    void UpdateLoop(std::uint32_t sleep_us = 10'000);
     void Stop();
 
+    void SetPositionCallback(PositionCallback callback);
     void UpdateAnchor(const std::string& name);
-    std::optional<geo::Position> GetPosition() const;
 
 private:
     void ComputePosition();
 
 private:
     std::atomic_bool m_is_working = false;
-    
+    PositionCallback m_position_callback = {};
     TriangulationAlgorithm m_algorithm;
-
-    std::optional<geo::Position> m_position;
-    mutable std::mutex m_position_mutex;
 };
 
 } // namespace copter::tracker

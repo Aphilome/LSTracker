@@ -34,7 +34,7 @@ public:
     void SetGPSRawCallback(GPSRawInfoCallback callback);
 
     void Stop();
-    void ReadMessagesThread();
+    void ReadMessagesLoop(std::uint32_t sleep_us = 100);
 
 private:
     using mavlink_message_t = __mavlink_message;

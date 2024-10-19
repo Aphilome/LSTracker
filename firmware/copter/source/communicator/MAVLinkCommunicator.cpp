@@ -56,7 +56,7 @@ void MAVLinkCommunicator::Stop()
     m_is_working = false;
 }
 
-void MAVLinkCommunicator::ReadMessagesThread()
+void MAVLinkCommunicator::ReadMessagesLoop(std::uint32_t sleep_us)
 {
     using namespace std::chrono_literals;
 
@@ -73,7 +73,7 @@ void MAVLinkCommunicator::ReadMessagesThread()
         }
         else
         {
-            std::this_thread::sleep_for(100us);
+            std::this_thread::sleep_for(std::chrono::microseconds(sleep_us));
         }
     }
 }
