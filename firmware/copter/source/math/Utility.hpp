@@ -3,7 +3,7 @@
 
 #include "Point.hpp"
 #include "Sphere.hpp"
-#include "Vector.cpp"
+#include "Vector.hpp"
 
 #include <optional>
 

@@ -12,6 +12,7 @@ add_library(${PROJECT_NAME} STATIC ${SOURCE_LIST})
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         copter-geo
+        copter-math
 )
 
 target_include_directories(${PROJECT_NAME}
