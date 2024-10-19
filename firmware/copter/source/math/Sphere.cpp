@@ -3,10 +3,10 @@
 namespace copter::math
 {
 
-bool Sphere::IsIntersected(const Sphere& first, const Sphere& second) const
+bool Sphere::IsIntersected(const Sphere& other) const
 {
-    auto distance = first.center.GetDistance(second.center);
-    return (first.radius + second.radius) >= distance;
+    auto distance = center.GetDistance(other.center);
+    return (radius + other.radius) >= distance;
 }
 
 } // namespace copter::math
