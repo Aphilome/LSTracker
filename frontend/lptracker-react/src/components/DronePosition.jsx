@@ -3,7 +3,7 @@ function DronePosition({positions, color}) {
     const coords = positions.map(i =>
         [i.lat, i.lon]
     );
-    const lineOptions = { color: color }
+    const lineOptions = { color: color, lineCap: "square", lineJoin: "inherit" }
     const dotOptions = { color: color, fill: color, opacity: 0.1 }
     const dronOptions = { color: color, fill: color, opacity: 1 }
 
