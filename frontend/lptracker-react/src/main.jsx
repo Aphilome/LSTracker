@@ -1,10 +1,14 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import ReactDOM from "react-dom/client";
 import App from './App.jsx'
+import App_Tbirdper from './App_Tbirdper.jsx'
+import App_Aphilome from './App_Aphilome.jsx'
 import './index.css'
 
-createRoot(document.getElementById('root')).render(
+const rootElement =  document.getElementById('root');
+const reactRoot = ReactDOM.createRoot(rootElement);
+reactRoot.render(
   <StrictMode>
-    <App />
+    <App_Tbirdper />
   </StrictMode>,
 )
