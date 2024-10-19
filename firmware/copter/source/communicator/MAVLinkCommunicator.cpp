@@ -10,7 +10,21 @@
 namespace
 {
 
-constexpr std::size_t max_package_size = 1500;
+
+std::size_t DetermineStreamBufferSize(copter::channel::IChannel& channel)
+{
+    using copter::channel::Protocol;
+
+    constexpr std::size_t max_socket_package_size = 1500;
+
+    switch (channel.GetProtocol())
+    {
+        case Protocol::TCP:  return max_socket_package_size;
+        case Protocol::UDP:  return max_socket_package_size;
+        case Protocol::UART: return 0;
+        default:             return 0;
+    }
+}
 
 } // namespace
 
@@ -18,7 +32,7 @@ namespace copter::communicator
 {
 
 MAVLinkCommunicator::MAVLinkCommunicator(channel::IChannel& channel)
-    : m_byte_stream(channel, max_package_size)
+    : m_byte_stream(channel, DetermineStreamBufferSize(channel))
 {
 }
 

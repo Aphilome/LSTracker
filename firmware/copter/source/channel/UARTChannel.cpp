@@ -105,6 +105,11 @@ UARTChannel::~UARTChannel()
     assert(result == 0);
 }
 
+Protocol UARTChannel::GetProtocol() const
+{
+    return Protocol::UART;
+}
+
 std::size_t UARTChannel::Read(void* data, std::size_t length)
 {
     return read(m_file, data, length);

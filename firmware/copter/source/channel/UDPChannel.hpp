@@ -17,6 +17,7 @@ class UDPChannel final
 public:
     UDPChannel(const std::string& host, std::uint16_t port);
 
+    Protocol GetProtocol() const override;
     std::size_t Read(void* data, std::size_t length) override;
     std::size_t Write(const void* data, std::size_t length) override;
 
