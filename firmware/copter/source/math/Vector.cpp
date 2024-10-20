@@ -18,4 +18,11 @@ void Vector::Normalize()
     z /= length;
 }
 
+void Vector::Inverse()
+{
+    x = -x;
+    y = -y;
+    z = -z;
+}
+
 } // namespace copter::math

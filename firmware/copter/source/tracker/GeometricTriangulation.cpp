@@ -18,10 +18,10 @@ std::optional<math::Point> GeometricTriangulation::Execute(const std::vector<mat
     if (!circle)
     {
         // The spheres don't intersect due to the measurement error of the radiuses.
-        auto first_sphere_point = ComputeLineIntersection(second.center, first, first.IsInside(second));
-        auto second_sphere_point = ComputeLineIntersection(first.center, second, second.IsInside(first));
+        auto first_sphere_point = ComputeLineIntersection(second.center, first, !first.IsInside(second));
+        auto second_sphere_point = ComputeLineIntersection(first.center, second, !second.IsInside(first));
         auto middle_point = first_sphere_point.GetMiddle(second_sphere_point);
-        auto third_sphere_point = ComputeLineIntersection(middle_point, third, false);
+        auto third_sphere_point = ComputeLineIntersection(middle_point, third);
         return middle_point.GetMiddle(third_sphere_point);
     }
 

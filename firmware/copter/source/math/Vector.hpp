@@ -28,6 +28,7 @@ struct Vector
 
     double GetLength() const;
     void Normalize();
+    void Inverse();
 };
 
 } // namespace copter::math
