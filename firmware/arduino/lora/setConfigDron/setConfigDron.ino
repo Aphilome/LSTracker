@@ -27,7 +27,7 @@
 // ---------- Arduino pins --------------
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial(4, 5); // Arduino RX <-- e220 TX, Arduino TX --> e220 RX
-LoRa_E220 e220ttl(&mySerial, 3, 7, 6); // AUX M0 M1
+LoRa_E220 e220ttl(&mySerial, 3, 7, 6); // AUX M0 M1  
 // -------------------------------------
 
 void printParameters(struct Configuration configuration);
@@ -56,8 +56,8 @@ void setup() {
 	printParameters(configuration);
 
 //	----------------------- DEFAULT TRANSPARENT -----------------------
-	configuration.ADDL = 0x02;  // First part of address
-	configuration.ADDH = 0x00; // Second part
+	configuration.ADDL = 0x42;  // First part of address
+	configuration.ADDH = 0x42;  // Second part
 
 	configuration.CHAN = 18; // Communication channel
 
@@ -65,14 +65,14 @@ void setup() {
 	configuration.SPED.airDataRate = AIR_DATA_RATE_010_24; // Air baud rate
 	configuration.SPED.uartParity = MODE_00_8N1; // Parity bit
 
-	configuration.OPTION.subPacketSetting = SPS_200_00; // Packet size
+	configuration.OPTION.subPacketSetting = SPS_064_10; // Packet size
 	configuration.OPTION.RSSIAmbientNoise = RSSI_AMBIENT_NOISE_DISABLED; // Need to send special command
 	configuration.OPTION.transmissionPower = POWER_22; // Device power
 
 	configuration.TRANSMISSION_MODE.enableRSSI = RSSI_DISABLED; // Enable RSSI info
-	configuration.TRANSMISSION_MODE.fixedTransmission = FT_TRANSPARENT_TRANSMISSION; // Enable repeater mode
+	configuration.TRANSMISSION_MODE.fixedTransmission = FT_FIXED_TRANSMISSION; // Enable repeater mode
 	configuration.TRANSMISSION_MODE.enableLBT = LBT_DISABLED; // Check interference
-	configuration.TRANSMISSION_MODE.WORPeriod = WOR_2000_011; // WOR timing
+	configuration.TRANSMISSION_MODE.WORPeriod = WOR_500_000; // WOR timing
 
   configuration.CRYPT.CRYPT_H = 0x00;  // encryption high byte, default: 0x00
   configuration.CRYPT.CRYPT_L = 0x00;  // encryption low byte, default: 0x00
