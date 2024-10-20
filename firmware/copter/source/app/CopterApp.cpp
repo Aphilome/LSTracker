@@ -3,7 +3,11 @@
 #include "ArgumentsParser.hpp"
 
 #include "communicator/MAVLinkCommunicator.hpp"
+
 #include "tracker/LocalPositionSystem.hpp"
+#include "tracker/GeometricTriangulation.hpp"
+
+#include "geo/Position.hpp"
 
 #include <thread>
 
@@ -20,8 +24,30 @@ int CopterApp::Run(int argc, char** argv)
     if (!channel)
         return EXIT_FAILURE;
 
+    tracker::LocalPositionSystem lps;
+    lps.SetAlgorithm(std::make_shared<tracker::GeometricTriangulation>());
+    lps.SetPositionCallback([](const geo::Position& position)
+    {
+        std::cout
+            << "[Position]"
+            << " latitude = " << position.latitude_deg
+            << "; longitude = " << position.longitude_deg
+            << "; altitude = " << position.altitude_m
+            << std::endl;
+    });
+
     auto communicator = communicator::MAVLinkCommunicator(*channel);
-    communicator.SetGlobalPositionCallback([](const communicator::GlobalPositionInfo& gpi)
+    communicator.SetGPSRawCallback([](const communicator::GPSRawInfo& gri)
+    {
+        std::cout
+            << "[GPSRawInfo]"
+            << " time = " << gri.time_us
+            << "; latitude = " << gri.latitude_deg
+            << "; longitude = " << gri.longitude_deg
+            << "; altitude = " << gri.altitude_m
+            << std::endl;
+    });
+    /*communicator.SetGlobalPositionCallback([](const communicator::GlobalPositionInfo& gpi)
     {
         std::cout
             << "[GlobalPositionInfo]"
@@ -35,31 +61,10 @@ int CopterApp::Run(int argc, char** argv)
             << "; speed_z = " << gpi.speed_z_ms
             << "; yaw = " << gpi.yaw_deg
             << std::endl;
-    });
-    /*communicator.SetGPSRawCallback([](const communicator::GPSRawInfo& gri)
-    {
-        std::cout
-            << "[GPSRawInfo]"
-            << " time = " << gri.time_us
-            << "; latitude = " << gri.latitude_deg
-            << "; longitude = " << gri.longitude_deg
-            << "; altitude = " << gri.altitude_m
-            << std::endl;
     });*/
 
-    tracker::LocalPositionSystem lps;
-    lps.SetPositionCallback([](const geo::Position& position)
-    {
-        std::cout
-            << "[Position]"
-            << " latitude = " << position.latitude_deg
-            << "; longitude = " << position.longitude_deg
-            << "; altitude = " << position.altitude_m
-            << std::endl;
-    });
-
-    std::thread mavlink_thread(&communicator::MAVLinkCommunicator::ReadMessagesLoop, &communicator, 100);
-    std::thread lps_thread(&tracker::LocalPositionSystem::UpdateLoop, &lps, 10000);
+    std::thread mavlink_thread(&communicator::MAVLinkCommunicator::ReadMessagesLoop, &communicator);
+    std::thread lps_thread(&tracker::LocalPositionSystem::UpdateLoop, &lps);
     mavlink_thread.join();
     lps_thread.join();
 

@@ -1,4 +1,5 @@
 #include "Intersection.hpp"
+
 #include "Vector.hpp"
 
 #include <cmath>

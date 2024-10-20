@@ -12,24 +12,44 @@ LocalPositionSystem::~LocalPositionSystem()
     Stop();
 }
 
-void LocalPositionSystem::UpdateLoop(std::uint32_t sleep_us)
+void LocalPositionSystem::UpdateLoop()
 {
     m_is_working = true;
 
     while (m_is_working)
     {
-        ComputePosition();
-        std::this_thread::sleep_for(std::chrono::microseconds(sleep_us));
+        std::unique_lock guard(m_anchors_mutex);
+        m_anchors_cv.wait(guard, [this] { return !m_is_working || !m_is_updated; });
+
+        if (!m_is_working)
+            break;
+
+        auto current_anchors = m_anchors;
+        m_is_updated = true;
+        guard.unlock();
+
+        ComputePosition(current_anchors);
     }
 }
 
 void LocalPositionSystem::Stop()
 {
     m_is_working = false;
+    m_anchors_cv.notify_all();
 }
 
-void LocalPositionSystem::UpdateAnchor(const std::string& name)
+void LocalPositionSystem::UpdateAnchor(std::uint8_t id, const geo::Position& position, double distance)
 {
+    {
+        std::lock_guard guard(m_anchors_mutex);
+
+        auto& anchor = m_anchors[id];
+        anchor.position = position;
+        anchor.distance = distance;
+
+        m_is_updated = false;
+    }
+    m_anchors_cv.notify_all();
 }
 
 void LocalPositionSystem::SetAlgorithm(std::shared_ptr<ITriangulationAlgorithm> algorithm)
@@ -43,7 +63,7 @@ void LocalPositionSystem::SetPositionCallback(PositionCallback callback)
     m_position_callback = std::move(callback);
 }
 
-void LocalPositionSystem::ComputePosition()
+void LocalPositionSystem::ComputePosition(const std::unordered_map<std::uint8_t, AnchorInfo>& anchors)
 {
     std::shared_ptr<ITriangulationAlgorithm> current_algorithm;
     {
@@ -51,11 +71,17 @@ void LocalPositionSystem::ComputePosition()
         current_algorithm = m_algorithm;
     }
 
-    math::Sphere first = { math::Point{ 0.0, 0.0, 0.0 }, 65.0 };
-    math::Sphere second = { math::Point{ 100.0, 0.0, 0.0 }, 38.0 };
-    math::Sphere third = { math::Point{ 60.0, 50.0, 0.0 }, 49.0 };
-    auto result = current_algorithm->Execute({ first, second, third });
+    std::vector<math::Sphere> spheres;
+    spheres.reserve(anchors.size());
 
+    for (auto& [_, anchor] : anchors)
+    {
+        auto& sphere = spheres.emplace_back();
+        sphere.center = geo::ConvertToCartesian(anchor.position);
+        sphere.radius = anchor.distance;
+    }
+
+    auto result = current_algorithm->Execute(spheres);
     if (result.first && m_position_callback)
     {
         auto geo_position = geo::ConvertToGeoPosition(result.first.value());
