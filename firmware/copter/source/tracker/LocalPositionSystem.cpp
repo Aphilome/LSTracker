@@ -51,7 +51,7 @@ void LocalPositionSystem::ComputePosition()
         current_algorithm = m_algorithm;
     }
 
-    math::Sphere first = { math::Point{ 0.0, 0.0, 0.0 }, 59.0 };
+    math::Sphere first = { math::Point{ 0.0, 0.0, 0.0 }, 65.0 };
     math::Sphere second = { math::Point{ 100.0, 0.0, 0.0 }, 38.0 };
     math::Sphere third = { math::Point{ 60.0, 50.0, 0.0 }, 49.0 };
     auto point = current_algorithm->Execute({ first, second, third });

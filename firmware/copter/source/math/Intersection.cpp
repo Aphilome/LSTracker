@@ -1,4 +1,4 @@
-#include "Utility.hpp"
+#include "Intersection.hpp"
 #include "Vector.hpp"
 
 #include <cmath>
@@ -29,6 +29,26 @@ std::optional<SphereIntersectionResult> ComputeSpheresIntersection(const Sphere&
     circle_center.y += circle_dir.y * circle_distance;
     circle_center.z += circle_dir.z * circle_distance;
     return SphereIntersectionResult{ circle_center, circle_dir, circle_radius };
+}
+
+std::optional<SphereIntersectionResult> ComputeSphereAndPlaneIntersection(const Sphere& sphere, const Point& plane_point, const Vector& plane_normal)
+{
+    // Plane:
+    // nx * (x - x0) + ny * (y - y0)  + nz * (z - xz)  = 0 
+    // A * x + B * y + C * z + D = 0
+    // A = nx; B = ny; C = nz; D = -nx * x0 - ny * y0 - nz * z0
+    auto d = -plane_normal.x * plane_point.x - plane_normal.y * plane_point.y - plane_normal.z * plane_point.z;
+    auto circle_distance = plane_normal.x * sphere.center.x + plane_normal.y * sphere.center.y + plane_normal.z * sphere.center.z;
+    if (circle_distance > sphere.radius)
+        return std::nullopt;
+
+    auto circle_center = sphere.center;
+    circle_center.x += plane_normal.x * circle_distance;
+    circle_center.y += plane_normal.y * circle_distance;
+    circle_center.z += plane_normal.z * circle_distance;
+
+    auto circle_radius = std::sqrt(sphere.radius * sphere.radius - circle_distance * circle_distance);
+    return SphereIntersectionResult{ circle_center, plane_normal, circle_radius };
 }
 
 math::Point ComputeLineIntersection(const math::Point& target_point, const math::Sphere& sphere, bool nearest)

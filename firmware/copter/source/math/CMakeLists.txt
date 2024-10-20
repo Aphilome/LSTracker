@@ -1,12 +1,14 @@
 set(PROJECT_NAME copter-math)
 
 set(SOURCE_LIST
+    Intersection.hpp
+    Intersection.cpp
     Point.hpp
     Point.cpp
     Sphere.hpp
     Sphere.cpp
-    Utility.hpp
-    Utility.cpp
+    Triangle.hpp
+    Triangle.cpp
     Vector.hpp
     Vector.cpp
 )

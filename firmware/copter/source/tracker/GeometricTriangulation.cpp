@@ -1,6 +1,6 @@
 #include "GeometricTriangulation.hpp"
 
-#include "math/Utility.hpp"
+#include "math/Intersection.hpp"
 
 namespace copter::tracker
 {
