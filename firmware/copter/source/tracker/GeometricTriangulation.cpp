@@ -14,15 +14,15 @@ std::optional<math::Point> GeometricTriangulation::Execute(const std::vector<mat
     const auto& second = spheres[1];
     const auto& third = spheres[2];
 
-    auto circle = ComputeIntersection(first, second);
+    auto circle = ComputeSpheresIntersection(first, second);
     if (!circle)
     {
         // The spheres don't intersect due to the measurement error of the radiuses.
-        auto first_nearest_point = ComputeNearestPoint(second.center, first);
-        auto second_nearest_point = ComputeNearestPoint(first.center, second);
-        auto middle_point = first_nearest_point.GetMiddle(second_nearest_point);
-        auto third_nearest_point = ComputeNearestPoint(middle_point, third);
-        return middle_point.GetMiddle(third_nearest_point);
+        auto first_sphere_point = ComputeLineIntersection(second.center, first, first.IsInside(second));
+        auto second_sphere_point = ComputeLineIntersection(first.center, second, second.IsInside(first));
+        auto middle_point = first_sphere_point.GetMiddle(second_sphere_point);
+        auto third_sphere_point = ComputeLineIntersection(middle_point, third, false);
+        return middle_point.GetMiddle(third_sphere_point);
     }
 
     return std::nullopt;

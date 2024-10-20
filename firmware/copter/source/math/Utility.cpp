@@ -6,7 +6,7 @@
 namespace copter::math
 {
 
-std::optional<SphereIntersectionResult> ComputeIntersection(const Sphere& first, const Sphere& second)
+std::optional<SphereIntersectionResult> ComputeSpheresIntersection(const Sphere& first, const Sphere& second)
 {
     if (!first.IsIntersected(second))
         return std::nullopt;
@@ -27,20 +27,16 @@ std::optional<SphereIntersectionResult> ComputeIntersection(const Sphere& first,
     return SphereIntersectionResult{ circle_center, circle_dir, circle_radius };
 }
 
-math::Point ComputeNearestPoint(const math::Point& target_point, const math::Sphere& sphere)
+math::Point ComputeLineIntersection(const math::Point& target_point, const math::Sphere& sphere, bool reverse)
 {
+    auto sign = reverse ? -1.0 : 1.0;
     auto radius_dir = Vector(sphere.center, target_point);
     radius_dir.Normalize();
     return {
-        sphere.center.x + radius_dir.x * sphere.radius,
-        sphere.center.y + radius_dir.y * sphere.radius,
-        sphere.center.z + radius_dir.z * sphere.radius
+        sphere.center.x + sign * radius_dir.x * sphere.radius,
+        sphere.center.y + sign * radius_dir.y * sphere.radius,
+        sphere.center.z + sign * radius_dir.z * sphere.radius
     };
-}
-
-math::Point ComputeNearestPoint(const math::Sphere& sphere, const math::Point& target_point)
-{
-    return ComputeNearestPoint(target_point, sphere);
 }
 
 double ComputeTriangleArea(double a, double b, double c)

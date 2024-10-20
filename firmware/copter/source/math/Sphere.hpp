@@ -11,6 +11,8 @@ struct Sphere
     Point center = {};
     double radius = {};
 
+    bool IsInside(const Sphere& other) const;
+    bool IsOutside(const Sphere& other) const;
     bool IsIntersected(const Sphere& other) const;
 };
 

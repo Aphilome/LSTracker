@@ -21,11 +21,13 @@ struct SphereIntersectionResult
 // std::nullopt - no intersection
 // radius == 0 - one intersection
 // radius > 0 - circle
-std::optional<SphereIntersectionResult> ComputeIntersection(const Sphere& first, const Sphere& second);
+std::optional<SphereIntersectionResult> ComputeSpheresIntersection(const Sphere& first, const Sphere& second);
 
-math::Point ComputeNearestPoint(const math::Point& target_point, const math::Sphere& sphere);
-math::Point ComputeNearestPoint(const math::Sphere& sphere, const math::Point& target_point);
+// Finds nearest intersection of a line that passes through the center of the sphere and a target point with sphere.
+// Use reverse == true to get second point.
+math::Point ComputeLineIntersection(const math::Point& target_point, const math::Sphere& sphere, bool reverse);
 
+// The area of the triangle Heron's formula.
 double ComputeTriangleArea(double a, double b, double c);
 
 } // namespace copter::math

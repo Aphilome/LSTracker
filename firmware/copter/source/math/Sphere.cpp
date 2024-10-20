@@ -3,10 +3,23 @@
 namespace copter::math
 {
 
-bool Sphere::IsIntersected(const Sphere& other) const
+bool Sphere::IsInside(const Sphere& other) const
 {
     auto distance = center.GetDistance(other.center);
-    return (radius + other.radius) >= distance;
+    return other.radius > (distance + radius);
+}
+
+bool Sphere::IsOutside(const Sphere& other) const
+{
+    auto distance = center.GetDistance(other.center);
+    return distance > (radius + other.radius);
+}
+
+bool Sphere::IsIntersected(const Sphere& other) const
+{
+    return !this->IsInside(other)
+        && !other.IsInside(*this)
+        && !IsOutside(other);
 }
 
 } // namespace copter::math
