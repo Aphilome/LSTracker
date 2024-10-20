@@ -6,10 +6,8 @@ import {ANCHORS} from "../anchors";
 import DronePosition from "./DronePosition";
 import { DRONEPOSITIONSUWB, DRONEPOSITIONSGPS} from "../dronePositions";
 
-function Map() {
-    const [anchors, setAnchors] = useState(ANCHORS);
-    const [dronePositionsUwb, setDronePositionsUwb] = useState(DRONEPOSITIONSUWB);
-    const [dronePositionsGps, setDronePositionsGps] = useState(DRONEPOSITIONSGPS);
+function Map({anchors, dronePositionsUwb, dronePositionsGps}) {
+
 
     return(
         <MapContainer className='w-80 h-80' center={[51.505, -0.09]} zoom={13} >
