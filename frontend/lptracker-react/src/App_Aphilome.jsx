@@ -1,53 +1,23 @@
 import Map from './components/Map'
 import './App.css'
 import Plot from 'react-plotly.js'
-import {DRONEPOSITIONSGPS} from "./dronePositions";
 import {Box, Button} from "@chakra-ui/react"
+import {DRONEPOSITIONSUWB, DRONEPOSITIONSGPS} from "./dronePositions";
+import {useState} from "react";
+import {ANCHORS} from "./anchors";
+import PlotMain from "./components/PlotMain";
 
-function randomValues(num, mul) {
-    const arr = [];
-    const index = [];
-    for (let i = 0; i < num; i++) {
-        arr.push(Math.random() * mul)
-        index.push(i);
-    }
-    return {index, arr};
-}
+
 
 function App_Aphilome() {
-    const traces = Array(3).fill(0).map((_, i) => {
-        const {index, arr} = randomValues(20, 3);
-        return {
-            x: Array(20).fill(i),
-            y: index,
-            z: arr,
-            type: 'scatter3d',
-            mode: 'lines'
-        }
-    });
+    const [anchors, setAnchors] = useState(ANCHORS);
+    const [dronePositionsUwb, setDronePositionsUwb] = useState(DRONEPOSITIONSUWB);
+    const [dronePositionsGps, setDronePositionsGps] = useState(DRONEPOSITIONSGPS);
 
     return (
         <>
-            <Plot
-                data={traces}
-                layout={{
-                    width: 800,
-                    height: 800,
-                    title: `Simple 3D Scatter`
-                }}
-            />
-
-            <h1 className="text-3xl font-bold underline flex-col text-red ">
-                <div className="bg-red-200">Hello world!</div>
-                <div className="text-blue-500">Hello world!</div>
-                <div>Hello world!</div>
-            </h1>
-
-            <Map />
-
-            <Button m={2} >Tomato </Button>
-            <Box maxW="960px" mx="auto" />
-            <Box m={[2, 3]} />
+            <PlotMain dronePositionsUwb={dronePositionsUwb} dronePositionsGps={dronePositionsGps}/>
+            <Map anchors={anchors} dronePositionsUwb={dronePositionsUwb} dronePositionsGps={dronePositionsGps} />
         </>
     )
 }
