@@ -2,6 +2,7 @@ set(PROJECT_NAME copter-geo)
 
 set(SOURCE_LIST
     Position.hpp
+    Position.cpp
     WGS84.hpp
     WGS84.cpp
 )
