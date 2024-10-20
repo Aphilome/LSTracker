@@ -4,6 +4,7 @@
 #include "math/Sphere.hpp"
 
 #include <vector>
+#include <utility>
 #include <optional>
 
 namespace copter::tracker
@@ -12,9 +13,12 @@ namespace copter::tracker
 class ITriangulationAlgorithm
 {
 public:
+    using NullablePoint = std::optional<math::Point>;
+    using Result = std::pair<NullablePoint, NullablePoint>;
+
     virtual ~ITriangulationAlgorithm() = default;
 
-    virtual std::optional<math::Point> Execute(const std::vector<math::Sphere>& spheres) = 0;
+    virtual Result Execute(const std::vector<math::Sphere>& spheres) = 0;
 };
 
 } // namespace copter::tracker

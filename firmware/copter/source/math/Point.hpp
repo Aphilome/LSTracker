@@ -4,6 +4,8 @@
 namespace copter::math
 {
 
+struct Vector;
+
 struct Point
 {
     double x = {};
@@ -12,6 +14,7 @@ struct Point
 
     double GetDistance(const Point& other) const;
     Point GetMiddle(const Point& other) const;
+    void Move(const Vector& normal, double distance);
 };
 
 

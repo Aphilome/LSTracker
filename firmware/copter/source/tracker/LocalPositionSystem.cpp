@@ -54,11 +54,11 @@ void LocalPositionSystem::ComputePosition()
     math::Sphere first = { math::Point{ 0.0, 0.0, 0.0 }, 65.0 };
     math::Sphere second = { math::Point{ 100.0, 0.0, 0.0 }, 38.0 };
     math::Sphere third = { math::Point{ 60.0, 50.0, 0.0 }, 49.0 };
-    auto point = current_algorithm->Execute({ first, second, third });
+    auto result = current_algorithm->Execute({ first, second, third });
 
-    if (point && m_position_callback)
+    if (result.first && m_position_callback)
     {
-        auto geo_position = geo::ConvertToGeoPosition(point.value());
+        auto geo_position = geo::ConvertToGeoPosition(result.first.value());
         m_position_callback(geo_position);
     }
 }
