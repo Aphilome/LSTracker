@@ -6,7 +6,6 @@
 #include "GPSRawInfo.hpp"
 
 #include <atomic>
-#include <thread>
 #include <cstdint>
 #include <functional>
 
@@ -31,13 +30,15 @@ public:
     MAVLinkCommunicator(channel::IChannel& channel);
     ~MAVLinkCommunicator();
 
-    void SetGlobalPositionCallback(GlobalPositionInfoCallback callback);
-    void SetGPSRawCallback(GPSRawInfoCallback callback);
+    void SetGlobalPositionCallback(GlobalPositionInfoCallback callback); // Not thread-safe, use before ReadMessagesLoop.
+    void SetGPSRawCallback(GPSRawInfoCallback callback); // Not thread-safe, use before ReadMessagesLoop.
+
+    void Stop();
+    void ReadMessagesLoop();
 
 private:
     using mavlink_message_t = __mavlink_message;
 
-    void ReadThread();
     bool ReadMessage(mavlink_message_t& message);
     void ProcessMessage(const mavlink_message_t& message);
     void ProcessGlobalPositionMessage(const mavlink_message_t& message);
@@ -45,8 +46,7 @@ private:
 
 private:
     ByteStream m_byte_stream;
-    std::thread m_read_thread;
-    std::atomic_bool m_is_working = true;
+    std::atomic_bool m_is_working = false;
 
     GlobalPositionInfoCallback m_global_position_callback = {};
     GPSRawInfoCallback m_gps_raw_callback = {};

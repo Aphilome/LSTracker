@@ -16,6 +16,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         copter-channel
         copter-communicator
+        copter-tracker
 )
 
 target_include_directories(${PROJECT_NAME}

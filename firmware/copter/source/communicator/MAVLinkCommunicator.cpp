@@ -5,13 +5,26 @@
 #include <common/mavlink.h>
 
 #include <chrono>
-#include <iostream>
-#include <algorithm>
+#include <thread>
 
 namespace
 {
 
-constexpr std::size_t max_package_size = 1500;
+
+std::size_t DetermineStreamBufferSize(copter::channel::IChannel& channel)
+{
+    using copter::channel::Protocol;
+
+    constexpr std::size_t max_socket_package_size = 1500;
+
+    switch (channel.GetProtocol())
+    {
+        case Protocol::TCP:  return max_socket_package_size;
+        case Protocol::UDP:  return max_socket_package_size;
+        case Protocol::UART: return 0;
+        default:             return 0;
+    }
+}
 
 } // namespace
 
@@ -19,14 +32,13 @@ namespace copter::communicator
 {
 
 MAVLinkCommunicator::MAVLinkCommunicator(channel::IChannel& channel)
-    : m_byte_stream(channel, max_package_size)
-    , m_read_thread([this] { ReadThread(); })
+    : m_byte_stream(channel, DetermineStreamBufferSize(channel))
 {
 }
 
 MAVLinkCommunicator::~MAVLinkCommunicator()
 {
-    m_is_working = false;
+    Stop();
 }
 
 void MAVLinkCommunicator::SetGlobalPositionCallback(GlobalPositionInfoCallback callback)
@@ -39,14 +51,21 @@ void MAVLinkCommunicator::SetGPSRawCallback(GPSRawInfoCallback callback)
     m_gps_raw_callback = std::move(callback);
 }
 
-void MAVLinkCommunicator::ReadThread()
+void MAVLinkCommunicator::Stop()
+{
+    m_is_working = false;
+}
+
+void MAVLinkCommunicator::ReadMessagesLoop()
 {
     using namespace std::chrono_literals;
+
+    m_is_working = true;
 
     mavlink_message_t message = {};
 
     while (m_is_working)
-	{
+    {
         bool is_success = ReadMessage(message);
         if (is_success)
         {
@@ -56,7 +75,7 @@ void MAVLinkCommunicator::ReadThread()
         {
             std::this_thread::sleep_for(100us);
         }
-	}
+    }
 }
 
 bool MAVLinkCommunicator::ReadMessage(mavlink_message_t& message)

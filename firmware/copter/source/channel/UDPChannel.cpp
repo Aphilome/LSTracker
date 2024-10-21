@@ -8,6 +8,11 @@ UDPChannel::UDPChannel(const std::string& host, std::uint16_t port)
 {
 }
 
+Protocol UDPChannel::GetProtocol() const
+{
+    return Protocol::UDP;
+}
+
 std::size_t UDPChannel::Read(void* data, std::size_t length)
 {
     return m_socket.recv(data, length);

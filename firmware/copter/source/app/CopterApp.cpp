@@ -4,6 +4,13 @@
 
 #include "communicator/MAVLinkCommunicator.hpp"
 
+#include "tracker/LocalPositionSystem.hpp"
+#include "tracker/GeometricTriangulation.hpp"
+
+#include "geo/Position.hpp"
+
+#include <thread>
+
 namespace copter::app
 {
 
@@ -17,8 +24,41 @@ int CopterApp::Run(int argc, char** argv)
     if (!channel)
         return EXIT_FAILURE;
 
+    tracker::LocalPositionSystem lps;
+    lps.SetAlgorithm(std::make_shared<tracker::GeometricTriangulation>());
+    lps.SetPositionCallback([](const geo::Position& position)
+    {
+        std::cout
+            << "[Position]"
+            << " latitude = " << position.latitude_deg
+            << "; longitude = " << position.longitude_deg
+            << "; altitude = " << position.altitude_m
+            << std::endl;
+    });
+
     auto communicator = communicator::MAVLinkCommunicator(*channel);
-    communicator.SetGlobalPositionCallback([](const communicator::GlobalPositionInfo& gpi)
+    communicator.SetGPSRawCallback([&lps](const communicator::GPSRawInfo& gri)
+    {
+        std::cout
+            << "[GPSRawInfo]"
+            << " time = " << gri.time_us
+            << "; latitude = " << gri.latitude_deg
+            << "; longitude = " << gri.longitude_deg
+            << "; altitude = " << gri.altitude_m
+            << std::endl;
+
+        geo::Position copter_position = { gri.latitude_deg, gri.longitude_deg, gri.altitude_m };
+
+        geo::Position first_anchor = { -35.35998331, 149.16515480, 580.9 };
+        lps.UpdateAnchor(1, first_anchor, copter_position.GetDistance(first_anchor));
+
+        geo::Position second_anchor = { -35.36444108, 149.16956084, 580.9 };
+        lps.UpdateAnchor(2, second_anchor, copter_position.GetDistance(second_anchor));
+
+        geo::Position third_anchor = { -35.36444108, 149.16073500, 592.3 };
+        lps.UpdateAnchor(3, third_anchor, copter_position.GetDistance(third_anchor));
+    });
+    /*communicator.SetGlobalPositionCallback([](const communicator::GlobalPositionInfo& gpi)
     {
         std::cout
             << "[GlobalPositionInfo]"
@@ -32,28 +72,24 @@ int CopterApp::Run(int argc, char** argv)
             << "; speed_z = " << gpi.speed_z_ms
             << "; yaw = " << gpi.yaw_deg
             << std::endl;
-    });
-    /*communicator.SetGPSRawCallback([](const communicator::GPSRawInfo& gri)
-    {
-        std::cout
-            << "[GPSRawInfo]"
-            << " time = " << gri.time_us
-            << "; latitude = " << gri.latitude_deg
-            << "; longitude = " << gri.longitude_deg
-            << "; altitude = " << gri.altitude_m
-            << std::endl;
     });*/
 
-    while (true)
-    {
-    }
+    std::thread mavlink_thread(&communicator::MAVLinkCommunicator::ReadMessagesLoop, &communicator);
+    std::thread lps_thread(&tracker::LocalPositionSystem::UpdateLoop, &lps);
+    mavlink_thread.join();
+    lps_thread.join();
 
     return EXIT_SUCCESS;
 }
 
 std::optional<Arguments> CopterApp::ParseArguments(int argc, char** argv) const
 {
-    ArgumentsParser parser;
+    Arguments arguments = {};
+    arguments.protocol = channel::Protocol::UDP;
+    arguments.address = "127.0.0.1:50000";
+    return arguments;
+
+    /*ArgumentsParser parser;
 
     try
     {
@@ -64,7 +100,7 @@ std::optional<Arguments> CopterApp::ParseArguments(int argc, char** argv) const
         std::cerr << e.what() << std::endl << std::endl;
         std::cerr << parser.GetHelp() << std::endl;
         return std::nullopt;
-    }
+    }*/
 }
 
 std::unique_ptr<channel::IChannel> CopterApp::OpenChannel(const Arguments& arguments)

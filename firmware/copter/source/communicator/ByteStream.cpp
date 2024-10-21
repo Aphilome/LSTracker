@@ -13,6 +13,12 @@ ByteStream::ByteStream(channel::IChannel& channel, std::size_t buffer_size)
 
 bool ByteStream::ReadNext(std::uint8_t& byte)
 {
+    if (m_buffer.empty())
+    {
+        auto bytes_read = m_channel.Read(&byte, 1);
+        return bytes_read != -1;
+    }
+
     if (m_data_index >= m_data_size)
     {
         auto read_bytes = m_channel.Read(m_buffer.data(), m_buffer.size());
