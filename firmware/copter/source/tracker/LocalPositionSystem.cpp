@@ -85,6 +85,14 @@ void LocalPositionSystem::ComputePosition(const std::unordered_map<std::uint8_t,
     if (result.first && m_position_callback)
     {
         auto geo_position = geo::ConvertToGeoPosition(result.first.value());
+        if (result.second)
+        {
+            auto second_geo_position = geo::ConvertToGeoPosition(result.second.value());
+            if (second_geo_position.altitude_m < geo_position.altitude_m)
+            {
+                geo_position = second_geo_position;
+            }
+        }
         m_position_callback(geo_position);
     }
 }

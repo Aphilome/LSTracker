@@ -1,6 +1,7 @@
 #include "Intersection.hpp"
 
 #include "Vector.hpp"
+#include "Triangle.hpp"
 
 #include <cmath>
 
@@ -13,8 +14,7 @@ std::optional<SphereIntersectionResult> ComputeSpheresIntersection(const Sphere&
         return std::nullopt;
 
     auto distance = first.center.GetDistance(second.center);
-    auto area = ComputeTriangleArea(first.radius, second.radius, distance);
-    auto height = 2.0 * area / distance; // distance * height / 2 = area
+    auto height = ComputeTriangleHeight(first.radius, second.radius, distance);
 
     auto circle_dir = Vector(first.center, second.center);
     circle_dir.Normalize();
@@ -38,7 +38,7 @@ std::optional<SphereIntersectionResult> ComputeSphereAndPlaneIntersection(const 
     // A * x + B * y + C * z + D = 0
     // A = nx; B = ny; C = nz; D = -nx * x0 - ny * y0 - nz * z0
     auto d = -plane_normal.x * plane_point.x - plane_normal.y * plane_point.y - plane_normal.z * plane_point.z;
-    auto circle_distance = plane_normal.x * sphere.center.x + plane_normal.y * sphere.center.y + plane_normal.z * sphere.center.z;
+    auto circle_distance = std::abs(plane_normal.x * sphere.center.x + plane_normal.y * sphere.center.y + plane_normal.z * sphere.center.z + d);
     if (circle_distance > sphere.radius)
         return std::nullopt;
 

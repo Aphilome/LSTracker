@@ -47,8 +47,7 @@ ITriangulationAlgorithm::Result GeometricTriangulation::FindCirclesIntersection(
 
     auto dir = Vector(first.center, second.center);
     auto circles_distance = dir.GetLength();
-    auto area = ComputeTriangleArea(first.radius, second.radius, circles_distance);
-    auto height = 2.0 * area / circles_distance;
+    auto height = ComputeTriangleHeight(first.radius, second.radius, circles_distance);
 
     auto left_dir = Vector(
         first.normal.y * dir.z - first.normal.z * dir.y,
