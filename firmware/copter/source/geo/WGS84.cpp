@@ -5,7 +5,7 @@
 namespace
 {
 
-GeographicLib::Geocentric s_geocentric;
+GeographicLib::Geocentric s_geocentric(GeographicLib::Constants::WGS84_a(), GeographicLib::Constants::WGS84_f());
 
 } // namespace
 

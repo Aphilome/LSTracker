@@ -37,7 +37,7 @@ int CopterApp::Run(int argc, char** argv)
     });
 
     auto communicator = communicator::MAVLinkCommunicator(*channel);
-    communicator.SetGPSRawCallback([](const communicator::GPSRawInfo& gri)
+    communicator.SetGPSRawCallback([&lps](const communicator::GPSRawInfo& gri)
     {
         std::cout
             << "[GPSRawInfo]"
@@ -46,6 +46,17 @@ int CopterApp::Run(int argc, char** argv)
             << "; longitude = " << gri.longitude_deg
             << "; altitude = " << gri.altitude_m
             << std::endl;
+
+        geo::Position copter_position = { gri.latitude_deg, gri.longitude_deg, gri.altitude_m };
+
+        geo::Position first_anchor = { -35.35998331, 149.16515480, 580.9 };
+        lps.UpdateAnchor(1, first_anchor, copter_position.GetDistance(first_anchor));
+
+        geo::Position second_anchor = { -35.36444108, 149.16956084, 580.9 };
+        lps.UpdateAnchor(2, second_anchor, copter_position.GetDistance(second_anchor));
+
+        geo::Position third_anchor = { -35.36444108, 149.16073500, 592.3 };
+        lps.UpdateAnchor(3, third_anchor, copter_position.GetDistance(third_anchor));
     });
     /*communicator.SetGlobalPositionCallback([](const communicator::GlobalPositionInfo& gpi)
     {
